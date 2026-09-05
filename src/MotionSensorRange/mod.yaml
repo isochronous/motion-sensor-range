@@ -1,0 +1,3 @@
+title: "Motion Sensor Range"
+description: "Makes the range of the Duplicant Motion Sensor configurable via a slider in the building's side screen."
+staticID: "Isochronous.MotionSensorRange"
