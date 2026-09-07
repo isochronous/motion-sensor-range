@@ -13,10 +13,10 @@ Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cair
 
 ## Building
 
-Requires the .NET SDK (8+). The game DLLs are referenced directly from the game install; override the path if yours differs:
+Requires the .NET SDK (8+). Shared build configuration lives in the [oni-mods-common](https://github.com/isochronous/oni-mods-common) submodule, so clone with `--recurse-submodules` (or run `git submodule update --init`). The game DLLs are referenced directly from the game install; override the path if yours differs:
 
 ```
-dotnet build src/MotionSensorRange -c Release -p:GameLibsFolder="<game>\OxygenNotIncluded_Data\Managed"
+dotnet build src/MotionSensorRange -c Release -p:GameFolder="<path-to>\OxygenNotIncluded"
 ```
 
 A successful build automatically deploys `MotionSensorRange.dll`, `mod.yaml` and `mod_info.yaml` to `Documents\Klei\OxygenNotIncluded\mods\local\MotionSensorRange` (disable with `-p:ModDeployFolder=none`).
