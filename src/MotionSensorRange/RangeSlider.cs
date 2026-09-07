@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 using HarmonyLib;
 using KSerialization;
 using UnityEngine;
@@ -96,6 +97,16 @@ namespace MotionSensorRange
 			// LogicDuplicantSensor.OnSpawn has already registered with the default
 			// range at this point; re-apply the deserialized value.
 			ApplyRange();
+		}
+
+		// Blueprint/preconfigure-style mods restore settings by deserializing state
+		// onto the live building, which writes the field without going through the
+		// slider; re-apply so the sensor and visualizer pick the value up.
+		[OnDeserialized]
+		private void OnDeserialized()
+		{
+			if (isSpawned)
+				ApplyRange();
 		}
 
 		private void OnCopySettings(object data)
