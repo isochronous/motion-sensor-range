@@ -4,11 +4,13 @@
 	"publishedfileid"	"3797757617"
 	"contentfolder"		"C:\dev\motion-sensor-range\publish\content"
 	"previewfile"		"C:\dev\motion-sensor-range\publish\preview.png"
-	"visibility"		"2"
+	"visibility"		"0"
 	"title"			"Motion Sensor Range"
 	"description"		"Adds a range slider to the Duplicant Motion Sensor. Select a sensor and set how far it detects Duplicants, 2 to 16 tiles. Vanilla range is 4, which stays the default.
 
 The range snaps to even numbers because the detection area is centered on the sensor and is only symmetric at even sizes.
+
+This is a spiritual successor to Cairath's Configurable Motion Sensor Range, which no longer works on current game versions.
 
 [h2]Details[/h2]
 [list]

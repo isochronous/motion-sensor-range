@@ -2,6 +2,8 @@ Adds a range slider to the Duplicant Motion Sensor. Select a sensor and set how 
 
 The range snaps to even numbers because the detection area is centered on the sensor and is only symmetric at even sizes.
 
+This is a spiritual successor to Cairath's Configurable Motion Sensor Range, which no longer works on current game versions.
+
 [h2]Details[/h2]
 [list]
 [*]Each sensor keeps its own range, saved with your game.
