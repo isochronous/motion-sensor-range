@@ -27,6 +27,12 @@ internal static class Program
 				new Rectangle(int.Parse(args[3]), int.Parse(args[4]), int.Parse(args[5]), int.Parse(args[6])));
 			return;
 		}
+		if (args[0] == "chevrons")
+		{
+			ComposeChevrons(args[1], args[2],
+				new Rectangle(int.Parse(args[3]), int.Parse(args[4]), int.Parse(args[5]), int.Parse(args[6])));
+			return;
+		}
 		string inPath = args[0];
 		string outPath = args[1];
 		using var source = new Bitmap(inPath);
@@ -91,6 +97,20 @@ internal static class Program
 	{
 		const int canvas = 256;
 		using var source = new Bitmap(inPath);
+
+		// Copy the crop, erasing the translucent drop shadow (pure black, alpha <= ~80,
+		// bottom rows only) so it doesn't end up floating above the flipped sensor.
+		using var sprite = new Bitmap(crop.Width, crop.Height, PixelFormat.Format32bppArgb);
+		for (int y = 0; y < crop.Height; y++)
+			for (int x = 0; x < crop.Width; x++)
+			{
+				Color c = source.GetPixel(crop.X + x, crop.Y + y);
+				bool shadow = y >= crop.Height - 20 && c.A < 120 && c.R < 40 && c.G < 40 && c.B < 40;
+				if (c.A > 0 && !shadow)
+					sprite.SetPixel(x, y, c);
+			}
+		sprite.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
 		using var final = new Bitmap(canvas, canvas, PixelFormat.Format32bppArgb);
 		using (var g = Graphics.FromImage(final))
 		{
@@ -100,13 +120,141 @@ internal static class Program
 			g.SmoothingMode = SmoothingMode.AntiAlias;
 			float scale = Math.Min((canvas - 20f) / crop.Width, (canvas - 20f) / crop.Height);
 			int w = (int)(crop.Width * scale), h = (int)(crop.Height * scale);
-			g.DrawImage(source, new Rectangle((canvas - w) / 2, (canvas - h) / 2, w, h), crop, GraphicsUnit.Pixel);
+			g.DrawImage(sprite, new Rectangle((canvas - w) / 2, (canvas - h) / 2, w, h),
+				new Rectangle(0, 0, sprite.Width, sprite.Height), GraphicsUnit.Pixel);
 
-			DrawPlus(g, canvas - 46f, 100f, 54f, 16f);
-			DrawMinus(g, canvas - 46f, 172f, 54f, 16f);
+			// "+/-" centered over the sensor, closed-caption style: white text on a
+			// semi-transparent black band for guaranteed contrast against the art.
+			using var path = new GraphicsPath();
+			path.AddString("+/−", new FontFamily("Arial"), (int)FontStyle.Bold, 108f,
+				new PointF(0f, 0f), StringFormat.GenericTypographic);
+			RectangleF bounds = path.GetBounds();
+			using var move = new Matrix();
+			move.Translate(canvas / 2f - bounds.X - bounds.Width / 2f, canvas / 2f - bounds.Y - bounds.Height / 2f);
+			path.Transform(move);
+			bounds = path.GetBounds();
+			var band = new RectangleF(16f, bounds.Y - 9f, canvas - 32f, bounds.Height + 18f);
+			using (var bandPath = RoundedRectF(band, 9f))
+			using (var bandFill = new SolidBrush(Color.FromArgb(145, 0, 0, 0)))
+				g.FillPath(bandFill, bandPath);
+			using var fill = new SolidBrush(Color.White);
+			g.FillPath(fill, path);
 		}
 		final.Save(outPath, ImageFormat.Png);
 		Console.WriteLine($"Wrote {outPath} ({canvas}x{canvas})");
+	}
+
+	/// <summary>
+	/// Alternate design: ceiling-mounted sensor on a dark grey background, flanked by
+	/// white "&lt;" and "&gt;" chevrons, no outline.
+	/// </summary>
+	private static void ComposeChevrons(string inPath, string outPath, Rectangle crop)
+	{
+		const int canvas = 256;
+		const float cornerRadius = 16f;
+		using var sprite = ExtractFlippedSprite(inPath, crop);
+		using var final = new Bitmap(canvas, canvas, PixelFormat.Format32bppArgb);
+		using (var g = Graphics.FromImage(final))
+		{
+			g.Clear(Color.Transparent);
+			g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+			g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			g.SmoothingMode = SmoothingMode.AntiAlias;
+
+			var card = new RectangleF(1.5f, 1.5f, canvas - 3f, canvas - 3f);
+			using var cardPath = RoundedRectF(card, cornerRadius);
+			g.SetClip(cardPath);
+
+			// Radial background: lighter behind the sensor, darker toward the edges.
+			using (var bgEllipse = new GraphicsPath())
+			{
+				bgEllipse.AddEllipse(-60f, -80f, canvas + 120f, canvas + 140f);
+				using var bg = new PathGradientBrush(bgEllipse)
+				{
+					CenterColor = Color.FromArgb(78, 78, 82),
+					CenterPoint = new PointF(canvas / 2f, canvas * 0.42f),
+					SurroundColors = new[] { Color.FromArgb(40, 40, 43) },
+				};
+				g.FillRectangle(bg, 0, 0, canvas, canvas);
+			}
+
+			float scale = 150f / crop.Width;
+			int w = (int)(crop.Width * scale), h = (int)(crop.Height * scale);
+			int spriteLeft = (canvas - w) / 2;
+			int spriteTop = (canvas - h) / 2;
+
+			// Soft green detection glow below the dome.
+			using (var glowEllipse = new GraphicsPath())
+			{
+				glowEllipse.AddEllipse(canvas / 2f - 78f, spriteTop + h - 46f, 156f, 104f);
+				using var glow = new PathGradientBrush(glowEllipse)
+				{
+					CenterColor = Color.FromArgb(70, 130, 235, 90),
+					SurroundColors = new[] { Color.FromArgb(0, 130, 235, 90) },
+				};
+				g.FillPath(glow, glowEllipse);
+			}
+
+			g.DrawImage(sprite, new Rectangle(spriteLeft, spriteTop, w, h),
+				new Rectangle(0, 0, sprite.Width, sprite.Height), GraphicsUnit.Pixel);
+
+			// Bahnschrift Condensed has the tallest/thinnest chevrons of the installed
+			// fonts (1.56 height:width vs Arial's 1.11). Small drop shadows lift them.
+			using var shadow = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
+			using var fill = new SolidBrush(Color.White);
+			float leftX = spriteLeft / 2f + 12f, rightX = canvas - spriteLeft / 2f - 12f, midY = canvas / 2f;
+			DrawCenteredText(g, shadow, "<", leftX + 2.5f, midY + 3f, "Bahnschrift Condensed", 150f);
+			DrawCenteredText(g, shadow, ">", rightX + 2.5f, midY + 3f, "Bahnschrift Condensed", 150f);
+			DrawCenteredText(g, fill, "<", leftX, midY, "Bahnschrift Condensed", 150f);
+			DrawCenteredText(g, fill, ">", rightX, midY, "Bahnschrift Condensed", 150f);
+
+			g.ResetClip();
+			using var border = new Pen(Color.White, 3f);
+			g.DrawPath(border, cardPath);
+		}
+		final.Save(outPath, ImageFormat.Png);
+		Console.WriteLine($"Wrote {outPath} ({canvas}x{canvas})");
+	}
+
+	private static void DrawCenteredText(Graphics g, Brush brush, string text, float cx, float cy,
+		string fontFamily = "Arial", float emSize = 100f)
+	{
+		using var path = new GraphicsPath();
+		path.AddString(text, new FontFamily(fontFamily), (int)FontStyle.Bold, emSize,
+			new PointF(0f, 0f), StringFormat.GenericTypographic);
+		RectangleF bounds = path.GetBounds();
+		using var move = new Matrix();
+		move.Translate(cx - bounds.X - bounds.Width / 2f, cy - bounds.Y - bounds.Height / 2f);
+		path.Transform(move);
+		g.FillPath(brush, path);
+	}
+
+	private static Bitmap ExtractFlippedSprite(string inPath, Rectangle crop)
+	{
+		using var source = new Bitmap(inPath);
+		var sprite = new Bitmap(crop.Width, crop.Height, PixelFormat.Format32bppArgb);
+		for (int y = 0; y < crop.Height; y++)
+			for (int x = 0; x < crop.Width; x++)
+			{
+				Color c = source.GetPixel(crop.X + x, crop.Y + y);
+				bool shadow = y >= crop.Height - 20 && c.A < 120 && c.R < 40 && c.G < 40 && c.B < 40;
+				if (c.A > 0 && !shadow)
+					sprite.SetPixel(x, y, c);
+			}
+		sprite.RotateFlip(RotateFlipType.RotateNoneFlipY);
+		return sprite;
+	}
+
+	private static GraphicsPath RoundedRectF(RectangleF r, float radius)
+	{
+		float d = radius * 2f;
+		var path = new GraphicsPath();
+		path.AddArc(r.X, r.Y, d, d, 180f, 90f);
+		path.AddArc(r.Right - d, r.Y, d, d, 270f, 90f);
+		path.AddArc(r.Right - d, r.Bottom - d, d, d, 0f, 90f);
+		path.AddArc(r.X, r.Bottom - d, d, d, 90f, 90f);
+		path.CloseFigure();
+		return path;
 	}
 
 	private static int DeMix(int channel, int background, float alpha)

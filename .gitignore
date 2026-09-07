@@ -5,3 +5,4 @@ obj/
 
 # extracted game art stays local
 assets-src/captures/presence_sensor_atlas.png
+publish/content/

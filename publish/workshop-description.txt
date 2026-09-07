@@ -1,0 +1,16 @@
+Adds a range slider to the Duplicant Motion Sensor. Select a sensor and set how far it detects Duplicants, 2 to 16 tiles. Vanilla range is 4, which stays the default.
+
+The range snaps to even numbers because the detection area is centered on the sensor and is only symmetric at even sizes.
+
+[h2]Details[/h2]
+[list]
+[*]Each sensor keeps its own range, saved with your game.
+[*]Works with the copy settings tool.
+[*]A range set on an unbuilt sensor carries over when construction finishes. Works with pre-configuration mods such as Blueprints Expanded.
+[*]Removing the mod reverts sensors to vanilla behavior. Saves are otherwise untouched.
+[/list]
+
+[h2]Compatibility[/h2]
+Works with the base game and all DLCs, on build 744825 (U59) or newer. No dependencies. A new game is not required.
+
+Source and issue tracker: https://github.com/isochronous/motion-sensor-range
