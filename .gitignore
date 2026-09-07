@@ -2,3 +2,6 @@ bin/
 obj/
 .vs/
 *.user
+
+# extracted game art stays local
+assets-src/captures/presence_sensor_atlas.png
