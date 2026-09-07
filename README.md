@@ -9,6 +9,7 @@ Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cair
 - A `RangeSlider` component (implementing the game's current `IIntSliderControl`) is added to the motion sensor prefab via a Harmony postfix on `LogicDuplicantSensorConfig.DoPostConfigureComplete`, giving the building an int slider side screen.
 - When the slider changes (or a saved value is loaded), the mod sets `LogicDuplicantSensor.pickupRange`, rebuilds the sensor's scene-partitioner registration to match the new detection area, and resizes the `RangeVisualizer` overlay.
 - The chosen range is saved with the building (`KSerialization`).
+- The building participates in the vanilla **copy-settings** system (the mirror button / drag tool copies range between motion sensors), and a range set on an under-construction building — via mods that expose settings pre-construction — carries over when construction completes.
 - Ranges snap to even numbers because the sensor's scan area is only symmetric for even ranges.
 
 ## Building

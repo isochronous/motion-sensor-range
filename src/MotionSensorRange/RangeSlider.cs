@@ -4,7 +4,7 @@ using HarmonyLib;
 using KSerialization;
 using UnityEngine;
 
-#pragma warning disable 649 // [MyCmpGet] fields are assigned by the game via reflection
+#pragma warning disable 649, 169 // [MyCmpGet]/[MyCmpAdd] fields are handled by the game via reflection
 
 namespace MotionSensorRange
 {
@@ -33,8 +33,19 @@ namespace MotionSensorRange
 		private static readonly MethodInfo OnPickupablesChangedMethod = AccessTools.Method(typeof(LogicDuplicantSensor), "OnPickupablesChanged");
 		private static readonly MethodInfo RefreshReachableCellsMethod = AccessTools.Method(typeof(LogicDuplicantSensor), "RefreshReachableCells");
 
+		private static readonly EventSystem.IntraObjectHandler<RangeSlider> OnCopySettingsDelegate =
+			new EventSystem.IntraObjectHandler<RangeSlider>(delegate(RangeSlider component, object data)
+			{
+				component.OnCopySettings(data);
+			});
+
 		[Serialize]
 		private int range = DefaultRange;
+
+		// Opts the motion sensor into the vanilla copy-settings system (the vanilla
+		// building has nothing copyable, so it lacks this component).
+		[MyCmpAdd]
+		private CopyBuildingSettings copyBuildingSettings;
 
 		[MyCmpGet]
 		private LogicDuplicantSensor sensor;
@@ -73,12 +84,39 @@ namespace MotionSensorRange
 			ApplyRange();
 		}
 
+		protected override void OnPrefabInit()
+		{
+			base.OnPrefabInit();
+			Subscribe((int)GameHashes.CopySettings, OnCopySettingsDelegate);
+		}
+
 		protected override void OnSpawn()
 		{
 			base.OnSpawn();
 			// LogicDuplicantSensor.OnSpawn has already registered with the default
 			// range at this point; re-apply the deserialized value.
 			ApplyRange();
+		}
+
+		private void OnCopySettings(object data)
+		{
+			GameObject sourceGo = data as GameObject;
+			if (sourceGo != null)
+				CopyRangeFrom(sourceGo.GetComponent<RangeSlider>());
+		}
+
+		/// <summary>
+		/// Takes the range from another slider (copy-settings tool, or the
+		/// under-construction building when construction completes). Safe before
+		/// spawn: OnSpawn applies the stored value.
+		/// </summary>
+		internal void CopyRangeFrom(RangeSlider source)
+		{
+			if (source == null || source.range == range)
+				return;
+			range = source.range;
+			if (isSpawned)
+				ApplyRange();
 		}
 
 		private void ApplyRange()
