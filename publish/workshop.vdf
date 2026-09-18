@@ -1,7 +1,12 @@
+// DO NOT upload this with steamcmd workshop_build_item: ONI can only download legacy
+// single-file items, and steamcmd creates manifest items that fail for every subscriber
+// ("Steam failed to download the mod"). Publish with Klei's "Oxygen Not Included Uploader"
+// (Steam Library > Tools) pointed at publish/content, or common/tools/WorkshopUpload.
+// Item 3797757617 was created that way on 2026-09-07 and is unlisted; 3804025857 replaced it.
 "workshopitem"
 {
 	"appid"			"457140"
-	"publishedfileid"	"3797757617"
+	"publishedfileid"	"3804025857"
 	"contentfolder"		"C:\dev\motion-sensor-range\publish\content"
 	"previewfile"		"C:\dev\motion-sensor-range\publish\preview.png"
 	"visibility"		"0"

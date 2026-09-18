@@ -12,6 +12,10 @@ Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cair
 - The building participates in the vanilla **copy-settings** system (the mirror button / drag tool copies range between motion sensors), and a range set on an under-construction building — via mods that expose settings pre-construction — carries over when construction completes.
 - Ranges snap to even numbers because the sensor's scan area is only symmetric for even ranges.
 
+## Publishing
+
+Workshop item: https://steamcommunity.com/sharedfiles/filedetails/?id=3804025857 (replaces 3797757617, which Steam could not deliver). Publish with Klei's **Oxygen Not Included Uploader** (Steam Library > Tools) from `publish/content`, never with steamcmd; see the [oni-mods-common README](https://github.com/isochronous/oni-mods-common#publishing-to-the-steam-workshop) for why.
+
 ## Building
 
 Requires the .NET SDK (8+). Shared build configuration lives in the [oni-mods-common](https://github.com/isochronous/oni-mods-common) submodule, so clone with `--recurse-submodules` (or run `git submodule update --init`). The game DLLs are referenced directly from the game install; override the path if yours differs:
