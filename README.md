@@ -14,7 +14,18 @@ Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cair
 
 ## Installing
 
-Subscribe on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3804025857).
+**Steam Workshop:** subscribe on the [Workshop page](https://steamcommunity.com/sharedfiles/filedetails/?id=3804025857) and enable the mod in the game's Mods menu.
+
+**As a local mod** (no Steam needed):
+
+1. Download `MotionSensorRange-<version>.zip` from the [latest release](https://github.com/isochronous/motion-sensor-range/releases/latest).
+2. Extract it into a new folder named `MotionSensorRange` inside the game's local mods folder, so that `mod.yaml` ends up directly inside it (create `local` if it does not exist):
+   - Windows: `Documents\Klei\OxygenNotIncluded\mods\local\MotionSensorRange`
+   - Linux: `~/.config/unity3d/Klei/Oxygen Not Included/mods/local/MotionSensorRange`
+   - macOS: `~/Library/Application Support/unity.Klei.Oxygen Not Included/mods/local/MotionSensorRange`
+3. Start the game, enable the mod under **Mods** in the main menu, and let the game restart.
+
+Use one copy or the other: with both the Workshop and the local copy enabled the mod loads twice.
 
 ## Building
 
