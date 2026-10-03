@@ -33,6 +33,9 @@ namespace MotionSensorRange
 		private static readonly FieldInfo DirtyField = AccessTools.Field(typeof(LogicDuplicantSensor), "pickupablesDirty");
 		private static readonly MethodInfo OnPickupablesChangedMethod = AccessTools.Method(typeof(LogicDuplicantSensor), "OnPickupablesChanged");
 		private static readonly MethodInfo RefreshReachableCellsMethod = AccessTools.Method(typeof(LogicDuplicantSensor), "RefreshReachableCells");
+		private static readonly bool SensorInternalsFound = ExtentsField != null && EntryField != null && DirtyField != null
+			&& OnPickupablesChangedMethod != null && RefreshReachableCellsMethod != null;
+		private static bool warnedMissingInternals;
 
 		private static readonly EventSystem.IntraObjectHandler<RangeSlider> OnCopySettingsDelegate =
 			new EventSystem.IntraObjectHandler<RangeSlider>(delegate(RangeSlider component, object data)
@@ -137,15 +140,24 @@ namespace MotionSensorRange
 
 			sensor.pickupRange = range;
 
+			if (!SensorInternalsFound)
+			{
+				if (!warnedMissingInternals)
+					Debug.LogWarning("[MotionSensorRange] LogicDuplicantSensor internals not found; the range setting has no effect until the mod is updated");
+				warnedMissingInternals = true;
+				return;
+			}
+
 			// Mirror the extents math from LogicDuplicantSensor.OnSpawn.
-			Vector2I xy = Grid.CellToXY(this.NaturalBuildingCell());
+			int origin = this.NaturalBuildingCell();
+			Vector2I xy = Grid.CellToXY(origin);
 			int cell = Grid.XYToCell(xy.x, xy.y + range / 2);
 			CellOffset offset = new CellOffset(0, range / 2);
-			if ((bool)rotatable)
+			if (rotatable != null)
 			{
 				offset = rotatable.GetRotatedCellOffset(offset);
-				if (Grid.IsCellOffsetValid(this.NaturalBuildingCell(), offset))
-					cell = Grid.OffsetCell(this.NaturalBuildingCell(), offset);
+				if (Grid.IsCellOffsetValid(origin, offset))
+					cell = Grid.OffsetCell(origin, offset);
 			}
 			Extents extents = new Extents(cell, range / 2);
 			ExtentsField.SetValue(sensor, extents);
