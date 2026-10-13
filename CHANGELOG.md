@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Chinese (Simplified) translation. Translations load from `translations/<locale>.po`; the template for other languages is `translations/MotionSensorRange.pot`.
+- Chinese (Simplified), Korean and Russian translations. Translations load from `translations/<locale>.po`; the template for other languages is `translations/MotionSensorRange.pot`.
 
 ## 1.1.1 - 2026-10-03
 

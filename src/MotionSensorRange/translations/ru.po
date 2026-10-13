@@ -1,0 +1,23 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not Included\n"
+"POT Version: 2.0\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.SLIDER_TOOLTIP
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.SLIDER_TOOLTIP"
+msgid "Detects Duplicants within {0} tiles"
+msgstr "Обнаруживает дубликантов в радиусе {0} кл."
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TITLE
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TITLE"
+msgid "Range"
+msgstr "Дальность"
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TOOLTIP
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TOOLTIP"
+msgid "Set how far away the sensor can detect Duplicants"
+msgstr "Задает, на каком расстоянии датчик обнаруживает дубликантов"

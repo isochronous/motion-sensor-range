@@ -1,0 +1,23 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not Included\n"
+"POT Version: 2.0\n"
+"Language: ko_KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.SLIDER_TOOLTIP
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.SLIDER_TOOLTIP"
+msgid "Detects Duplicants within {0} tiles"
+msgstr "{0} 타일 이내의 복제체를 감지합니다"
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TITLE
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TITLE"
+msgid "Range"
+msgstr "범위"
+
+#. STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TOOLTIP
+msgctxt "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TOOLTIP"
+msgid "Set how far away the sensor can detect Duplicants"
+msgstr "센서가 복제체를 얼마나 멀리서 감지할 수 있는지 설정합니다"
