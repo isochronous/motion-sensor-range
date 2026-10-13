@@ -21,10 +21,9 @@ namespace MotionSensorRange
 		public const int MaxRange = 16;
 		public const int DefaultRange = 4;
 
+		// The keys ModStrings.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN registers; the slider screen looks them up.
 		public const string TitleKey = "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TITLE";
-		public const string Title = "Range";
 		public const string TooltipKey = "STRINGS.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.TOOLTIP";
-		public const string Tooltip = "Set how far away the sensor can detect Duplicants";
 
 		// LogicDuplicantSensor keeps its scene partitioner state in private members;
 		// these are re-applied whenever the range changes (names verified against U59-744825).
@@ -74,7 +73,7 @@ namespace MotionSensorRange
 
 		public string GetSliderTooltipKey(int index) => TooltipKey;
 
-		public string GetSliderTooltip(int index) => $"Detects Duplicants within {range} tiles";
+		public string GetSliderTooltip(int index) => string.Format(ModStrings.UI.UISIDESCREENS.MOTION_SENSOR_RANGE_SIDE_SCREEN.SLIDER_TOOLTIP, range);
 
 		public void SetSliderValue(float value, int index)
 		{

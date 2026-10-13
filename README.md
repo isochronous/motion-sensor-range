@@ -27,6 +27,10 @@ Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cair
 
 Use one copy or the other: with both the Workshop and the local copy enabled the mod loads twice.
 
+## Translations
+
+The mod is available in Chinese (Simplified); the game's language setting picks it. Other languages come from `src/MotionSensorRange/translations/MotionSensorRange.pot`: translate it as `<locale>.po` (`ko.po`, `ru.po`, the game's locale codes) in that folder and the game loads it.
+
 ## Building
 
 Requires the .NET SDK (8+). Shared build configuration lives in the [oni-mods-common](https://github.com/isochronous/oni-mods-common) submodule, so clone with `--recurse-submodules` (or run `git submodule update --init`). The game DLLs are referenced directly from the game install; override the path if yours differs:

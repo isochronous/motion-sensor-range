@@ -8,12 +8,6 @@ namespace MotionSensorRange
 		[HarmonyPatch(typeof(GeneratedBuildings), nameof(GeneratedBuildings.LoadGeneratedBuildings))]
 		public static class GeneratedBuildings_LoadGeneratedBuildings_Patch
 		{
-			public static void Prefix()
-			{
-				Strings.Add(RangeSlider.TitleKey, RangeSlider.Title);
-				Strings.Add(RangeSlider.TooltipKey, RangeSlider.Tooltip);
-			}
-
 			// Also give the under-construction building a slider, so the range can be
 			// pre-configured (e.g. by mods that expose settings before construction)
 			// and carried over when the building completes.

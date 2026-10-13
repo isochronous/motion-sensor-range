@@ -6,6 +6,7 @@
     <AssemblyName>MotionSensorRange</AssemblyName>
     <RootNamespace>MotionSensorRange</RootNamespace>
     <Version>1.1.1</Version>
+    <UseTranslations>true</UseTranslations>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\common\oni-mod.targets" />
