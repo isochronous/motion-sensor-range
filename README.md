@@ -1,5 +1,7 @@
 # Motion Sensor Range
 
+**This repository is archived.** This project now lives in [isochronous/ONI-Mods](https://github.com/isochronous/ONI-Mods/tree/main/mods/motion-sensor-range), with its full history; work and new releases continue there. The releases published here stay available.
+
 An [Oxygen Not Included](https://www.klei.com/games/oxygen-not-included) mod that makes the range of the **Duplicant Motion Sensor** configurable via a slider in the building's side screen (2–16 tiles, default 4 — the vanilla range).
 
 Inspired by [Cairath's Configurable Motion Sensor Range](https://github.com/Cairath/ONI-Mods/tree/master/src/ConfigurableMotionSensorRange), which crashes on current game versions (`TypeLoadException: VTable setup of type RangeSwitcher failed` — the game's `ISliderControl` interface changed shape). This is a from-scratch rewrite against the current game (U59+, all DLCs).
